@@ -3,6 +3,8 @@
 import {
   useEffect,
   useMemo,
+  useState,
+  useRef,
   useSyncExternalStore,
   type ReactElement,
 } from "react";
@@ -68,7 +70,7 @@ function applyTheme(mode: ThemeMode) {
 
 function subscribe(onStoreChange: () => void) {
   if (typeof window === "undefined") {
-    return () => {};
+    return () => { };
   }
 
   const handleStorage = (event: StorageEvent) => {
@@ -109,37 +111,92 @@ export function ThemeToggle() {
 
   const value = useMemo(() => (validThemeModes.includes(mode) ? mode : "system"), [mode]);
 
-  return (
-    <div
-      role="radiogroup"
-      aria-label="Theme mode"
-      className="inline-flex items-center gap-1 rounded-full border border-line/80 bg-surface p-1"
-    >
-      {OPTIONS.map((option) => {
-        const active = option.value === value;
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-        return (
-          <button
-            key={option.value}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            onClick={() => {
-              localStorage.setItem(THEME_STORAGE_KEY, option.value);
-              window.dispatchEvent(new Event(THEME_MODE_EVENT));
-              applyTheme(option.value);
-            }}
-            className={`inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-              active
-                ? "bg-accent text-accent-foreground shadow-sm"
-                : "text-muted hover:bg-surface-alt hover:text-foreground"
-            }`}
-          >
-            {option.icon}
-            <span>{option.label}</span>
-          </button>
-        );
-      })}
-    </div>
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const activeOption = OPTIONS.find((o) => o.value === value) || OPTIONS[2];
+
+  return (
+    <>
+      <div
+        role="radiogroup"
+        aria-label="Theme mode"
+        className="hidden sm:inline-flex items-center gap-1 rounded-full border border-line/80 bg-surface p-1"
+      >
+        {OPTIONS.map((option) => {
+          const active = option.value === value;
+
+          return (
+            <button
+              key={option.value}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              onClick={() => {
+                localStorage.setItem(THEME_STORAGE_KEY, option.value);
+                window.dispatchEvent(new Event(THEME_MODE_EVENT));
+                applyTheme(option.value);
+              }}
+              className={`inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${active
+                  ? "bg-accent text-accent-foreground shadow-sm"
+                  : "text-muted hover:bg-surface-alt hover:text-foreground"
+                }`}
+            >
+              {option.icon}
+              <span>{option.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="relative sm:hidden" ref={dropdownRef}>
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line/80 bg-surface text-foreground transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          aria-label="Toggle theme"
+        >
+          {activeOption.icon}
+        </button>
+
+        {isOpen && (
+          <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50 flex w-36 flex-col overflow-hidden rounded-xl border border-line bg-surface p-1 shadow-lg motion-enter">
+            {OPTIONS.map((option) => {
+              const active = option.value === value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    localStorage.setItem(THEME_STORAGE_KEY, option.value);
+                    window.dispatchEvent(new Event(THEME_MODE_EVENT));
+                    applyTheme(option.value);
+                    setIsOpen(false);
+                  }}
+                  className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none ${active
+                      ? "bg-accent/10 text-accent font-semibold"
+                      : "text-muted hover:bg-surface-alt hover:text-foreground"
+                    }`}
+                >
+                  {option.icon}
+                  <span>{option.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
