@@ -28,7 +28,11 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL ?? "https://growthhackerdev.com"),
+  metadataBase: new URL(
+    process.env.SITE_URL?.startsWith("http")
+      ? process.env.SITE_URL
+      : `https://${process.env.SITE_URL ?? "growthhackerdev.com"}`
+  ),
   title: { default: "GrowthHackerDev", template: "%s | GrowthHackerDev" },
   description:
     "Growth playbooks for technical builders using automation, AI workflows, and modern marketing tactics.",
