@@ -91,7 +91,7 @@ function subscribe(onStoreChange: () => void) {
 }
 
 export function ThemeToggle() {
-  const mode = useSyncExternalStore(subscribe, getStoredMode, () => "system");
+  const mode = useSyncExternalStore(subscribe, getStoredMode, () => "system") as ThemeMode;
 
   useEffect(() => {
     applyTheme(mode);
