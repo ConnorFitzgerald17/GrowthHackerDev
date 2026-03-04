@@ -24,7 +24,7 @@ export function Header() {
                 priority
               />
             </span>
-            <span className="pr-2 text-sm font-semibold tracking-[0.07em] text-foreground sm:text-base">
+            <span className="hidden pr-2 text-sm font-semibold tracking-[0.07em] text-foreground sm:inline-block sm:text-base">
               GrowthHackerDev
             </span>
           </Link>
