@@ -34,7 +34,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const jsonLd = post.metadata?.jsonLd ?? buildBlogPostingJsonLd(post);
-  const faqJsonLd = post.faq?.length ? buildFaqJsonLd(post.faq) : null;
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 pb-20 pt-8 sm:px-8">
@@ -175,12 +174,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {faqJsonLd ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      ) : null}
     </main>
   );
 }
