@@ -114,26 +114,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             }}
           />
         </div>
-
-        {/* Builder note */}
-        <div className="mt-8 rounded-2xl border border-line/70 bg-surface-alt p-6">
-          <p className="text-xs uppercase tracking-wider text-muted">
-            Builder Note
-          </p>
-
-          <p className="mt-2 text-sm text-muted">
-            This article was generated and published using{" "}
-            <Link
-              href={`https://autoblogwriter.app/?utm_source=growthhackerdev&utm_medium=blog&utm_campaign=article_note_${slug}`}
-              target="_blank"
-              className="font-semibold text-accent hover:underline"
-            >
-              AutoBlogWriter
-            </Link>
-            . The system automates research, article writing, SEO metadata,
-            images, and publishing.
-          </p>
-        </div>
       </article>
 
       {/* Product CTA */}
