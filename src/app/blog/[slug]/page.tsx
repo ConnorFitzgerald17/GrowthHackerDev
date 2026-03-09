@@ -38,7 +38,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <main className="mx-auto w-full max-w-5xl px-4 pb-20 pt-8 sm:px-8">
       <div className="motion-enter" data-delay="1">
-        <Breadcrumbs items={[{ label: "Archive", href: "/blog" }, { label: post.title }]} />
+        <Breadcrumbs
+          items={[{ label: "Archive", href: "/blog" }, { label: post.title }]}
+        />
       </div>
 
       <article className="motion-enter relative" data-delay="1">
@@ -56,7 +58,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             ))}
           </div>
 
-          <h1 className="max-w-4xl text-4xl tracking-tight text-foreground sm:text-5xl md:text-6xl">{post.title}</h1>
+          <h1 className="max-w-4xl text-4xl tracking-tight text-foreground sm:text-5xl md:text-6xl">
+            {post.title}
+          </h1>
+
+          {/* Powered by badge */}
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-line bg-surface-alt px-3 py-1 text-xs font-medium text-muted">
+            ⚡ Powered by{" "}
+            <Link
+              href={`https://autoblogwriter.app/?utm_source=growthhackerdev&utm_medium=blog&utm_campaign=title_badge_${slug}`}
+              target="_blank"
+              className="font-semibold text-accent hover:underline"
+            >
+              AutoBlogWriter
+            </Link>
+          </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line/70 pt-4 text-sm font-medium text-muted">
             <span className="inline-flex items-center gap-2">
@@ -66,7 +82,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {post.author?.name ?? "GrowthHackerDev"}
             </span>
             <span aria-hidden="true">•</span>
-            <time dateTime={post.publishDate}>{formatPublishDate(post.publishDate)}</time>
+            <time dateTime={post.publishDate}>
+              {formatPublishDate(post.publishDate)}
+            </time>
             <span aria-hidden="true">•</span>
             <span>{post.readingTime} min read</span>
           </div>
@@ -87,6 +105,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="mt-8" />
         )}
 
+        {/* Article */}
         <div className="mt-10 rounded-3xl border border-line/70 bg-surface p-6 sm:p-10">
           <div
             className="ghd-post-content"
@@ -95,15 +114,62 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             }}
           />
         </div>
+
+        {/* Builder note */}
+        <div className="mt-8 rounded-2xl border border-line/70 bg-surface-alt p-6">
+          <p className="text-xs uppercase tracking-wider text-muted">
+            Builder Note
+          </p>
+
+          <p className="mt-2 text-sm text-muted">
+            This article was generated and published using{" "}
+            <Link
+              href={`https://autoblogwriter.app/?utm_source=growthhackerdev&utm_medium=blog&utm_campaign=article_note_${slug}`}
+              target="_blank"
+              className="font-semibold text-accent hover:underline"
+            >
+              AutoBlogWriter
+            </Link>
+            . The system automates research, article writing, SEO metadata,
+            images, and publishing.
+          </p>
+        </div>
       </article>
 
+      {/* Product CTA */}
+      <section className="motion-enter mt-14" data-delay="2">
+        <div className="relative overflow-hidden rounded-3xl border border-line bg-surface p-8">
+          <div className="ambient-orb absolute -right-6 -top-8 h-40 w-40 rounded-full bg-accent-glow blur-3xl" />
+
+          <p className="text-xs uppercase tracking-wider text-muted">
+            Behind this blog
+          </p>
+
+          <h3 className="mt-2 text-2xl font-semibold text-foreground">
+            AutoBlogWriter
+          </h3>
+
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+            This blog runs on AutoBlogWriter. It automates the entire content
+            pipeline including research, SEO structure, article generation,
+            images, and publishing.
+          </p>
+
+          <Link
+            href={`https://autoblogwriter.app/?utm_source=growthhackerdev&utm_medium=blog&utm_campaign=product_card_${slug}`}
+            target="_blank"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-2 text-sm font-semibold text-accent-foreground transition-colors hover:bg-foreground hover:text-background"
+          >
+            See how the system works
+          </Link>
+        </div>
+      </section>
+
+      {/* Related posts */}
       {post.relatedPosts && post.relatedPosts.length > 0 ? (
         <section className="motion-enter mt-16" data-delay="2">
           <div className="mb-6 flex items-center justify-between gap-4 border-b border-line/70 pb-4">
             <h2 className="text-3xl text-foreground">System parallels</h2>
-            <span className="rounded-full border border-line bg-surface-alt px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-              Related reads
-            </span>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2">
@@ -111,19 +177,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <Link
                 key={related.slug}
                 href={`/blog/${related.slug}`}
-                className="group flex min-h-[190px] cursor-pointer flex-col justify-between rounded-2xl border border-line/70 bg-surface p-5 transition-all duration-200 hover:border-accent/60 hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="group flex min-h-[190px] flex-col justify-between rounded-2xl border border-line/70 bg-surface p-5 transition-all hover:border-accent/60 hover:bg-surface-alt"
               >
                 <div>
-                  <h3 className="text-2xl leading-tight text-foreground transition-colors duration-200 group-hover:text-accent">
+                  <h3 className="text-2xl text-foreground group-hover:text-accent">
                     {related.title}
                   </h3>
-                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted">{related.excerpt}</p>
+                  <p className="mt-3 text-sm text-muted">
+                    {related.excerpt}
+                  </p>
                 </div>
-                <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent">
-                  Read article
-                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3.5 w-3.5" aria-hidden="true">
-                    <path d="M2 7h10M8 3l4 4-4 4" />
-                  </svg>
+
+                <span className="mt-6 text-sm font-semibold text-accent">
+                  Read article →
                 </span>
               </Link>
             ))}
@@ -131,41 +197,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </section>
       ) : null}
 
-      {post.faq && post.faq.length > 0 ? (
-        <section className="motion-enter mt-16" data-delay="2">
-          <h2 className="mb-6 text-center text-3xl text-foreground">Implementation FAQ</h2>
-          <div className="mx-auto max-w-3xl space-y-3">
-            {post.faq.map((item) => (
-              <details
-                key={item.question}
-                className="group overflow-hidden rounded-2xl border border-line/70 bg-surface [&_summary::-webkit-details-marker]:hidden"
-              >
-                <summary className="flex cursor-pointer items-center justify-between px-5 py-4 text-left text-lg font-semibold text-foreground transition-colors duration-200 hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-                  {item.question}
-                  <span className="ml-4 inline-flex h-7 w-7 items-center justify-center rounded-full border border-line bg-surface-alt text-muted transition-transform duration-200 group-open:rotate-180 group-open:text-accent">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4" aria-hidden="true">
-                      <path d="M6 9l6 6 6-6" />
-                    </svg>
-                  </span>
-                </summary>
-                <div className="border-t border-line/70 px-5 py-4 text-muted">
-                  <p className="leading-relaxed">{item.answer}</p>
-                </div>
-              </details>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      <section className="motion-enter relative mt-20 overflow-hidden rounded-[1.9rem] border border-line bg-surface p-8 text-center sm:p-10" data-delay="3">
+      {/* Newsletter */}
+      <section className="motion-enter relative mt-20 overflow-hidden rounded-[1.9rem] border border-line bg-surface p-8 text-center sm:p-10">
         <div className="ambient-orb absolute -right-6 -top-8 h-36 w-36 rounded-full bg-accent-glow blur-3xl" />
-        <h2 className="relative text-4xl text-foreground">Ship growth systems faster</h2>
-        <p className="relative mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-          Coming soon: reserve your spot in the newsletter. Limited spaces for early readers
-          getting weekly deep dives into scaling technical products and SEO architecture.
+
+        <h2 className="text-4xl text-foreground">
+          Ship growth systems faster
+        </h2>
+
+        <p className="mx-auto mt-3 max-w-2xl text-base text-muted">
+          Reserve your spot for weekly deep dives into technical growth,
+          SEO architecture, and scalable product systems.
         </p>
+
         <NewsletterCtaLink
-          className="relative mt-7 inline-flex h-11 items-center justify-center rounded-full bg-accent px-8 text-sm font-semibold text-accent-foreground! transition-colors duration-200 hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="mt-7 inline-flex h-11 items-center justify-center rounded-full bg-accent px-8 text-sm font-semibold text-accent-foreground transition-colors hover:bg-foreground hover:text-background"
           label="Reserve your spot"
         />
       </section>
