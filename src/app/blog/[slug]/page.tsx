@@ -177,6 +177,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </section>
       ) : null}
 
+      {post.faq && post.faq.length > 0 ? ( 
+        <section className="motion-enter mt-16" data-delay="2"> 
+          <h2 className="mb-6 text-center text-3xl text-foreground">
+            Implementation FAQ
+          </h2> 
+          <div className="mx-auto max-w-3xl space-y-3"> 
+            {post.faq.map((item) => ( 
+              <details key={item.question} className="group overflow-hidden rounded-2xl border border-line/70 bg-surface [&_summary::-webkit-details-marker]:hidden" >
+                <summary className="flex cursor-pointer items-center justify-between px-5 py-4 text-left text-lg font-semibold text-foreground transition-colors duration-200 hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"> {item.question} <span className="ml-4 inline-flex h-7 w-7 items-center justify-center rounded-full border border-line bg-surface-alt text-muted transition-transform duration-200 group-open:rotate-180 group-open:text-accent"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4" aria-hidden="true"> <path d="M6 9l6 6 6-6" /> </svg> </span> </summary> <div className="border-t border-line/70 px-5 py-4 text-muted"> <p className="leading-relaxed">{item.answer}</p> </div> </details> ))} </div> </section> ) : null}
+
       {/* Newsletter */}
       <section className="motion-enter relative mt-20 overflow-hidden rounded-[1.9rem] border border-line bg-surface p-8 text-center sm:p-10">
         <div className="ambient-orb absolute -right-6 -top-8 h-36 w-36 rounded-full bg-accent-glow blur-3xl" />
